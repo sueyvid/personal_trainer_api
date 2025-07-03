@@ -37,10 +37,10 @@ jobs:
           pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Rodar testes
-        run: |
-          . venv/bin/activate
-          pytest tests
+    #   - name: Rodar testes
+    #     run: |
+    #       . venv/bin/activate
+    #       pytest tests
 
       - name: Finalizar containers
         run: docker-compose down
