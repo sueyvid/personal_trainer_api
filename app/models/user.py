@@ -1,6 +1,10 @@
 from sqlalchemy import Column, Integer, String, Enum
 from app.core.database import Base
 import enum
+from sqlalchemy import Column, Integer, String, Enum
+from sqlalchemy.orm import relationship
+
+workouts = relationship("Workout", back_populates="aluno")
 
 class UserRole(str, enum.Enum):
     aluno = "student"

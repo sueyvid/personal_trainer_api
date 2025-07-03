@@ -1,0 +1,61 @@
+name: CI - FastAPI Personal Trainer
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: personal_trainer
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd="pg_isready -U postgres"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+
+    env:
+      DATABASE_URL: postgresql://postgres:postgres@localhost:5432/personal_trainer
+      PYTHONUNBUFFERED: 1
+
+    steps:
+      - name: Checkout código
+        uses: actions/checkout@v3
+
+      - name: Instala Docker Compose
+        run: sudo apt-get update && sudo apt-get install -y docker-compose
+
+      - name: Build containers
+        run: docker-compose build
+
+      - name: Run containers
+        run: docker-compose up -d
+
+      - name: Espera banco subir
+        run: sleep 10
+
+      - name: Instalar dependências
+        run: |
+          python -m venv venv
+          . venv/bin/activate
+          pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Rodar testes
+        run: |
+          . venv/bin/activate
+          pytest tests
+
+      - name: Finalizar containers
+        run: docker-compose down

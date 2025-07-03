@@ -6,3 +6,6 @@ bcrypt
 python-jose
 python-dotenv
 psycopg2-binary
+pytest
+httpx
+pytest-asyncio
