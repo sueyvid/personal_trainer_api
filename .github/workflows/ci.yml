@@ -10,21 +10,6 @@ jobs:
   test:
     runs-on: ubuntu-latest
 
-    services:
-      postgres:
-        image: postgres:15
-        env:
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: postgres
-          POSTGRES_DB: personal_trainer
-        ports:
-          - 5432:5432
-        options: >-
-          --health-cmd="pg_isready -U postgres"
-          --health-interval=10s
-          --health-timeout=5s
-          --health-retries=5
-
     env:
       DATABASE_URL: postgresql://postgres:postgres@localhost:5432/personal_trainer
       PYTHONUNBUFFERED: 1
@@ -60,4 +45,3 @@ jobs:
       - name: Finalizar containers
         run: docker-compose down
 
-        
