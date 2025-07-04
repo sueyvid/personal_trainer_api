@@ -1,16 +1,20 @@
-from sqlalchemy.orm import declarative_base, sessionmaker
-from sqlalchemy import create_engine
 import os
+from sqlalchemy import create_engine
+from sqlalchemy.orm import declarative_base, sessionmaker
+
+# ✅ Lê a variável de ambiente injetada pelo Docker Compose
+DATABASE_URL = os.getenv("DATABASE_URL")
+
+# ✅ Adiciona uma verificação para dar um erro claro se a variável não for encontrada
+if DATABASE_URL is None:
+    raise ValueError("A variável de ambiente DATABASE_URL não foi definida.")
+
+engine = create_engine(DATABASE_URL)
+
+SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 Base = declarative_base()
-SessionLocal = None
-engine = None
 
+# Função init_db (se você a usa)
 def init_db():
-    global SessionLocal, engine
-    database_url = os.getenv(
-        "DATABASE_URL",
-        "postgresql://postgres:postgres@db:5432/personal_trainer"
-    )
-    engine = create_engine(database_url)
-    SessionLocal = sessionmaker(bind=engine, autoflush=False, autocommit=False)
+    Base.metadata.create_all(bind=engine)

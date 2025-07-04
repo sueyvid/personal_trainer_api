@@ -1,3 +1,5 @@
+version: '3.8'
+
 services:
   api:
     build: .
@@ -6,25 +8,25 @@ services:
       - "8000:8000"
     volumes:
       - ./app:/app/app
+    # ✅ ADICIONE ESTA SEÇÃO
     environment:
-      - DATABASE_URL=postgresql://postgres:postgres@db:5432/personal_trainer
-      - PYTHONUNBUFFERED=1
+      # O hostname aqui é o NOME DO SERVIÇO do banco de dados, não localhost!
+      - DATABASE_URL=postgresql://postgres:postgres@postgres_db:5432/personal_trainer_db
+    # ✅ ADICIONE ESTA LINHA
     depends_on:
-      db:
-        condition: service_healthy
+      - postgres_db
 
-  db:
+  postgres_db:
     image: postgres:15
     container_name: postgres_db
-    restart: always
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: personal_trainer
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=personal_trainer_db
     ports:
       - "5432:5432"
-    healthcheck:
-      test: ["CMD", "pg_isready", "-U", "postgres"]
-      interval: 5s
-      timeout: 5s
-      retries: 5
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
