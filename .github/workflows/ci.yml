@@ -1,4 +1,4 @@
-name: CI - FastAPI Personal Trainer
+name: CI - Testes e Verificações
 
 on:
   push:
@@ -10,38 +10,39 @@ jobs:
   test:
     runs-on: ubuntu-latest
 
-    env:
-      DATABASE_URL: postgresql://postgres:postgres@localhost:5432/personal_trainer
-      PYTHONUNBUFFERED: 1
+    # ✅ 1. Inicia um contêiner do PostgreSQL para este job
+    services:
+      postgres:
+        image: postgres:15 # Usa a imagem oficial do PostgreSQL
+        env:
+          POSTGRES_USER: testuser
+          POSTGRES_PASSWORD: testpassword
+          POSTGRES_DB: testdb
+        ports:
+          - 5432:5432 # Mapeia a porta para o host do runner
+        # Garante que o job só continue quando o banco de dados estiver pronto
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
 
     steps:
-      - name: Checkout código
-        uses: actions/checkout@v3
+      - name: Checkout do código
+        uses: actions/checkout@v4
 
-      - name: Instala Docker Compose
-        run: sudo apt-get update && sudo apt-get install -y docker-compose
-
-      - name: Build containers
-        run: docker-compose build
-
-      - name: Run containers
-        run: docker-compose up -d
-
-      - name: Espera banco subir
-        run: sleep 10
+      - name: Configurar Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip' # Adiciona cache para acelerar instalações futuras
 
       - name: Instalar dependências
-        run: |
-          python -m venv venv
-          . venv/bin/activate
-          pip install --upgrade pip
-          pip install -r requirements.txt
+        run: pip install -r requirements.txt
 
-    #   - name: Rodar testes
-    #     run: |
-    #       . venv/bin/activate
-    #       pytest tests
-
-      - name: Finalizar containers
-        run: docker-compose down
-
+      - name: Rodar os testes com Pytest
+        # ✅ 2. Define a variável de ambiente para que a aplicação se conecte ao banco do serviço
+        # O pytest usará esta URL para se conectar ao contêiner postgres iniciado acima
+        env:
+          DATABASE_URL: postgresql://testuser:testpassword@localhost:5432/testdb
+        run: pytest
