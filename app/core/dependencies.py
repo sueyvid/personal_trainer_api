@@ -28,7 +28,6 @@ def get_current_user(
         )
         username: str = payload.get("sub")
         role: str = payload.get("role")
-        # ✅ Adota a lógica da main, que inclui o ID do usuário no token.
         user_id: int = payload.get("id")
 
         if username is None or role is None or user_id is None:

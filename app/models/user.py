@@ -13,7 +13,6 @@ class User(Base):
     hashed_password = Column(String, nullable=False)
     role = Column(String, nullable=False)  # ex: "student", "trainer"
 
-    # ✅ Mantém a sua estrutura de relacionamentos, que é a correta e mais completa.
     # Lista de treinos que este usuário (como treinador) criou
     created_workouts = relationship(
         "Workout",

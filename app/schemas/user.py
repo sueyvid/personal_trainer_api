@@ -29,7 +29,6 @@ class UserUpdate(BaseModel):
     password: str
 
 
-# ✅ A classe que faltava no seu repositório
 class UserDelete(BaseModel):
     password: str
 

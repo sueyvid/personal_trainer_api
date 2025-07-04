@@ -1,5 +1,4 @@
-version: '3.8'
-
+# A linha 'version' não é mais necessária nas versões recentes do Docker Compose
 services:
   api:
     build: .
@@ -8,13 +7,12 @@ services:
       - "8000:8000"
     volumes:
       - ./app:/app/app
-    # ✅ ADICIONE ESTA SEÇÃO
     environment:
-      # O hostname aqui é o NOME DO SERVIÇO do banco de dados, não localhost!
       - DATABASE_URL=postgresql://postgres:postgres@postgres_db:5432/personal_trainer_db
-    # ✅ ADICIONE ESTA LINHA
+      - PGHOST=postgres_db
     depends_on:
       - postgres_db
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000
 
   postgres_db:
     image: postgres:15

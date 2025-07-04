@@ -11,7 +11,7 @@ class WorkoutBase(BaseModel):
 
 
 class WorkoutCreate(WorkoutBase):
-    aluno_id: int
+    student_id: int
 
 
 class WorkoutUpdate(BaseModel):
@@ -27,6 +27,6 @@ class WorkoutOut(BaseModel):
     description: Optional[str]
     start_date: Optional[date]
     end_date: Optional[date]
-    aluno_id: int
+    student_id: int
 
     model_config = {"from_attributes": True}

@@ -6,7 +6,6 @@ from app.core.database import engine, Base, init_db
 from app.routers import auth, trainer, student, users, workouts
 
 
-# 2. ✅ A função lifespan é a maneira correta de gerenciar a inicialização
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """

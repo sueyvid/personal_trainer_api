@@ -4,7 +4,6 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class Settings(BaseSettings):
-    # ✅ Adicione a DATABASE_URL aqui
     DATABASE_URL: str
 
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 60
