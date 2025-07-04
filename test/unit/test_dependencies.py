@@ -11,6 +11,7 @@ from app.core.dependencies import get_current_user, require_role
 
 # --- Novos Testes para require_role ---
 
+
 def test_require_role_sucesso():
     """
     Testa se a dependência permite o acesso quando o papel do usuário é o correto.
@@ -18,7 +19,7 @@ def test_require_role_sucesso():
     # 1. Arrange
     # Cria uma instância da dependência que exige o papel "trainer"
     trainer_only_dependency = require_role("trainer")
-    
+
     # Cria um usuário falso que satisfaz a condição
     fake_trainer_user = {"username": "test.trainer", "role": "trainer", "id": 123}
 
@@ -38,7 +39,7 @@ def test_require_role_falha_papel_incorreto():
     # 1. Arrange
     # Cria uma instância da dependência que exige o papel "trainer"
     trainer_only_dependency = require_role("trainer")
-    
+
     # Cria um usuário falso que NÃO satisfaz a condição (ele é um "student")
     fake_student_user = {"username": "test.student", "role": "student", "id": 456}
 

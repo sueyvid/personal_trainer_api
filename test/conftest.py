@@ -8,8 +8,9 @@ from sqlalchemy.pool import StaticPool
 
 from app.main import app
 from app.core.database import Base
+
 # ✅ ATUALIZADO: Importa 'get_db' do local centralizado de dependências
-from app.core.dependencies import get_db 
+from app.core.dependencies import get_db
 
 # --- Configuração do Banco de Dados de Teste ---
 SQLALCHEMY_DATABASE_URL = "sqlite:///:memory:"
@@ -44,7 +45,7 @@ app.dependency_overrides[get_db] = override_get_db
 def client():
     # Cria as tabelas no DB em memória antes de cada teste
     Base.metadata.create_all(bind=engine)
-    
+
     yield TestClient(app)
 
     # Apaga tudo para o próximo teste ser executado de forma limpa

@@ -2,6 +2,7 @@
 
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
+
 class Settings(BaseSettings):
     # ✅ Adicione a DATABASE_URL aqui
     DATABASE_URL: str
@@ -10,6 +11,7 @@ class Settings(BaseSettings):
     SECRET_KEY: str = "sua_chave_secreta_super_segura_e_longa"
     ALGORITHM: str = "HS256"
 
-    model_config = SettingsConfigDict(env_file=".env", env_file_encoding='utf-8')
+    model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf-8")
+
 
 settings = Settings()

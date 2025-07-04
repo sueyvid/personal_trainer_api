@@ -4,6 +4,7 @@ from sqlalchemy import Column, Integer, String, ForeignKey, Date
 from sqlalchemy.orm import relationship
 from app.core.database import Base
 
+
 class Workout(Base):
     __tablename__ = "workouts"
 
@@ -20,5 +21,9 @@ class Workout(Base):
 
     # ✅ 3. Mantém os relacionamentos explícitos e bem definidos da sua branch.
     # Isso é crucial para o SQLAlchemy entender as múltiplas conexões com a tabela User.
-    trainer = relationship("User", foreign_keys=[trainer_id], back_populates="created_workouts")
-    student = relationship("User", foreign_keys=[student_id], back_populates="assigned_workouts")
+    trainer = relationship(
+        "User", foreign_keys=[trainer_id], back_populates="created_workouts"
+    )
+    student = relationship(
+        "User", foreign_keys=[student_id], back_populates="assigned_workouts"
+    )

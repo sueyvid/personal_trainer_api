@@ -2,6 +2,7 @@
 
 from fastapi.testclient import TestClient
 
+
 # ✅ TUDO CERTO AQUI!
 def test_login_sucesso(client: TestClient):
     """
@@ -11,7 +12,9 @@ def test_login_sucesso(client: TestClient):
     # 👇 A CORREÇÃO ESTÁ AQUI
     user_data = {"username": "testuser", "password": "testpassword", "role": "student"}
     response_register = client.post("/auth/register", json=user_data)
-    assert response_register.status_code == 200 # Boa prática: verificar se o registro funcionou
+    assert (
+        response_register.status_code == 200
+    )  # Boa prática: verificar se o registro funcionou
 
     # Act: Tenta fazer o login com as credenciais corretas.
     login_data = {"username": "testuser", "password": "testpassword"}
@@ -23,6 +26,7 @@ def test_login_sucesso(client: TestClient):
     assert "access_token" in data
     assert data["token_type"] == "bearer"
 
+
 # ✅ TUDO CERTO AQUI!
 def test_login_senha_incorreta(client: TestClient):
     """
@@ -30,9 +34,13 @@ def test_login_senha_incorreta(client: TestClient):
     """
     # Arrange: Cria um usuário com um papel VÁLIDO.
     # 👇 A CORREÇÃO ESTÁ AQUI
-    user_data = {"username": "testuser2", "password": "correctpassword", "role": "trainer"}
+    user_data = {
+        "username": "testuser2",
+        "password": "correctpassword",
+        "role": "trainer",
+    }
     response_register = client.post("/auth/register", json=user_data)
-    assert response_register.status_code == 200 # Boa prática
+    assert response_register.status_code == 200  # Boa prática
 
     # Act: Tenta fazer o login com a senha errada.
     login_data = {"username": "testuser2", "password": "wrongpassword"}
@@ -41,6 +49,7 @@ def test_login_senha_incorreta(client: TestClient):
     # Assert: Verifica se a API retorna o erro esperado (401 Unauthorized).
     assert response.status_code == 401
     assert response.json() == {"detail": "Usuário ou senha inválidos"}
+
 
 # ✅ TUDO CERTO AQUI!
 def test_login_usuario_nao_existe(client: TestClient):
