@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
-from app.core.dependencies import get_current_user, require_role, get_db
+from app.core.dependencies import get_current_user, require_role
+from app.routers.auth import get_db
 from app.models.workout import Workout
 from app.models.user import User
 from app.schemas.workout import WorkoutCreate, WorkoutUpdate, WorkoutOut
@@ -15,7 +16,7 @@ router = APIRouter(
 def create_workout(
     data: WorkoutCreate,
     db: Session = Depends(get_db),
-    current_user=Depends(require_role("treinador"))
+    current_user=Depends(require_role("trainer"))
 ):
     aluno = db.query(User).filter(User.id == data.aluno_id).first()
     if not aluno:
@@ -31,7 +32,7 @@ def create_workout(
 @router.get("/", response_model=list[WorkoutOut])
 def list_workouts(
     db: Session = Depends(get_db),
-    current_user=Depends(require_role("treinador"))
+    current_user=Depends(require_role("trainer"))
 ):
     return db.query(Workout).all()
 
@@ -41,7 +42,7 @@ def update_workout(
     workout_id: int,
     data: WorkoutUpdate,
     db: Session = Depends(get_db),
-    current_user=Depends(require_role("treinador"))
+    current_user=Depends(require_role("trainer"))
 ):
     workout = db.query(Workout).filter(Workout.id == workout_id).first()
     if not workout:
@@ -59,7 +60,7 @@ def update_workout(
 def delete_workout(
     workout_id: int,
     db: Session = Depends(get_db),
-    current_user=Depends(require_role("treinador"))
+    current_user=Depends(require_role("trainer"))
 ):
     workout = db.query(Workout).filter(Workout.id == workout_id).first()
     if not workout:
@@ -67,3 +68,14 @@ def delete_workout(
     db.delete(workout)
     db.commit()
     return {"message": "Treino excluído com sucesso"}
+
+# Visualizar treinos do aluno
+# router = APIRouter(prefix="/workouts", tags=["workouts"])
+
+@router.get("/me", response_model=list[WorkoutOut])
+def get_my_workouts(
+    db: Session = Depends(get_db),
+    user=Depends(require_role("aluno"))
+):
+    workouts = db.query(Workout).filter(Workout.aluno_id == user["id"]).all()
+    return workouts
