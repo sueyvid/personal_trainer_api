@@ -16,10 +16,10 @@ class WorkoutUpdate(BaseModel):
     description: Optional[str]
     start_date: Optional[date]
     end_date: Optional[date]
-    
+
 class WorkoutOut(BaseModel):
     id: int
-    title: str
+    name: str
     description: Optional[str]
     start_date: Optional[date]
     end_date: Optional[date]
