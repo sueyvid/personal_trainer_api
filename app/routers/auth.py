@@ -28,7 +28,7 @@ def login(user: UserCreate, db: Session = Depends(get_db)):
     if not bcrypt.checkpw(user.password.encode('utf-8'), db_user.hashed_password.encode('utf-8')):
         raise HTTPException(status_code=401, detail="Usuário ou senha inválidos")
 
-    token = create_access_token({"sub": db_user.username, "role": db_user.role})
+    token = create_access_token({"sub": db_user.username, "role": db_user.role, "id": db_user.id})
     return {"access_token": token, "token_type": "bearer"}
 
 @router.post("/register", response_model=UserOut)

@@ -75,7 +75,7 @@ def delete_workout(
 @router.get("/me", response_model=list[WorkoutOut])
 def get_my_workouts(
     db: Session = Depends(get_db),
-    user=Depends(require_role("aluno"))
+    user=Depends(require_role("student"))
 ):
     workouts = db.query(Workout).filter(Workout.aluno_id == user["id"]).all()
     return workouts
