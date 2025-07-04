@@ -1,3 +1,3 @@
-SECRET_KEY = "chave-super-secreta"  # troque depois
+SECRET_KEY = "chave-super-secreta"
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 60

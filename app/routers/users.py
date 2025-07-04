@@ -40,7 +40,7 @@ def delete_me(
     current_user=Depends(get_current_user)
 ):
     user_db = db.query(User).filter(User.username == current_user["username"]).first()
-    # aqui você deveria verificar o hash da senha
+    # aqui deveria verificar o hash da senha
     if data.password != user_db.hashed_password:
         raise HTTPException(status_code=403, detail="Senha inválida")
     db.delete(user_db)
