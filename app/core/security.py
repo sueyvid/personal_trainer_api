@@ -1,9 +1,18 @@
-from datetime import datetime, timedelta
-from jose import JWTError, jwt
-from app.core import config
+from datetime import datetime, timedelta, timezone
+from jose import jwt, JWTError
+from app.core.config import settings
 
-def create_access_token(data: dict, expires_delta: timedelta = None):
+def create_access_token(data: dict, expires_delta: timedelta | None = None):
     to_encode = data.copy()
-    expire = datetime.utcnow() + (expires_delta or timedelta(minutes=15))
+    
+    if expires_delta:
+        expire = datetime.now(timezone.utc) + expires_delta
+    else:
+        # ✅ Usa o tempo de expiração do nosso arquivo de configuração!
+        expire_minutes = settings.ACCESS_TOKEN_EXPIRE_MINUTES
+        expire = datetime.now(timezone.utc) + timedelta(minutes=expire_minutes)
+        
     to_encode.update({"exp": expire})
-    return jwt.encode(to_encode, config.SECRET_KEY, algorithm=config.ALGORITHM)
+    
+    encoded_jwt = jwt.encode(to_encode, settings.SECRET_KEY, algorithm=settings.ALGORITHM)
+    return encoded_jwt
