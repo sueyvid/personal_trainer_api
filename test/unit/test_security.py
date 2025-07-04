@@ -1,7 +1,6 @@
 # tests/unit/test_security.py
 
-from unittest.mock import patch
-from datetime import datetime, timedelta
+from datetime import datetime
 from jose import jwt
 
 # A função que queremos testar

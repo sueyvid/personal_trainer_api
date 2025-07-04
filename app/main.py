@@ -2,13 +2,7 @@
 
 from fastapi import FastAPI
 from contextlib import asynccontextmanager
-
-# 1. Imports organizados no topo
 from app.core.database import engine, Base, init_db
-from app.models import (
-    user,
-    workout,
-)  # Garante que os modelos sejam "vistos" pelo SQLAlchemy
 from app.routers import auth, trainer, student, users, workouts
 
 
