@@ -25,7 +25,9 @@ async def wait_for_db(max_retries: int = 10, delay: float = 2.0):
         except OperationalError as e:
             print(f"⏳ Tentativa {attempt} falhou: {e}")
             await asyncio.sleep(delay)
-    raise RuntimeError("❌ Não foi possível conectar ao banco de dados após várias tentativas.")
+    raise RuntimeError(
+        "❌ Não foi possível conectar ao banco de dados após várias tentativas."
+    )
 
 
 @asynccontextmanager
