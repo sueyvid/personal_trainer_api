@@ -1,14 +1,15 @@
 # app/main.py
 
-from fastapi import FastAPI
-from contextlib import asynccontextmanager
-from sqlalchemy.exc import OperationalError
-from sqlalchemy import text
-
-from app.core.database import engine, Base, init_db
-from app.routers import auth, trainer, student, users, workouts
-
 import asyncio
+from contextlib import asynccontextmanager
+
+from fastapi import FastAPI
+from sqlalchemy import text
+from sqlalchemy.exc import OperationalError
+
+from app.core.database import Base, engine, init_db
+from app.routers import auth, student, trainer, users, workouts
+
 
 # Função para esperar o banco de dados
 async def wait_for_db(max_retries: int = 10, delay: float = 2.0):
@@ -26,6 +27,7 @@ async def wait_for_db(max_retries: int = 10, delay: float = 2.0):
             await asyncio.sleep(delay)
     raise RuntimeError("❌ Não foi possível conectar ao banco de dados após várias tentativas.")
 
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """
@@ -37,6 +39,7 @@ async def lifespan(app: FastAPI):
     Base.metadata.create_all(bind=engine)
     yield
     print("🛑 Serviço encerrando.")
+
 
 app = FastAPI(title="API Personal Trainer", lifespan=lifespan)
 

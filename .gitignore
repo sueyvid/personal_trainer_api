@@ -1,3 +1,6 @@
 # Ignorar arquivos Python compilados
 __pycache__/
 *.py[cod]
+
+# Ignorar ambiente com ruff
+Dockerfile.ruff
