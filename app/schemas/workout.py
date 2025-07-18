@@ -1,6 +1,9 @@
 from pydantic import BaseModel
 from datetime import date
 from typing import Optional
+from app.schemas.exercise import ExerciseOut
+from typing import List
+from app.schemas.user import UserOut
 
 
 class WorkoutBase(BaseModel):
@@ -11,7 +14,7 @@ class WorkoutBase(BaseModel):
 
 
 class WorkoutCreate(WorkoutBase):
-    student_id: int
+    pass
 
 
 class WorkoutUpdate(BaseModel):
@@ -27,6 +30,8 @@ class WorkoutOut(BaseModel):
     description: Optional[str]
     start_date: Optional[date]
     end_date: Optional[date]
-    student_id: int
-
+    students: list[UserOut] = []
     model_config = {"from_attributes": True}
+
+class WorkoutAssign(BaseModel):
+    student_ids: list[int]

@@ -3,6 +3,7 @@
 from sqlalchemy import Column, Integer, String
 from sqlalchemy.orm import relationship
 from app.core.database import Base
+from app.models.workout_student import workout_student  # novo import
 
 
 class User(Base):
@@ -23,7 +24,7 @@ class User(Base):
     # Lista de treinos atribuídos a este usuário (como aluno)
     assigned_workouts = relationship(
         "Workout",
-        foreign_keys="[Workout.student_id]",
-        back_populates="student",
-        cascade="all, delete-orphan",
+        secondary=workout_student,
+        back_populates="students",
     )
+

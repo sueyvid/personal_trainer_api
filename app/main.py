@@ -8,7 +8,8 @@ from sqlalchemy import text
 from sqlalchemy.exc import OperationalError
 
 from app.core.database import Base, engine, init_db
-from app.routers import auth, student, trainer, users, workouts
+from app.routers import auth, student, trainer, users, workouts, progress
+from app.routers.exercises import router as exercises_router
 
 
 # Função para esperar o banco de dados
@@ -50,3 +51,5 @@ app.include_router(users.router)
 app.include_router(workouts.router)
 app.include_router(trainer.router)
 app.include_router(student.router)
+app.include_router(progress.router)
+app.include_router(exercises_router)
