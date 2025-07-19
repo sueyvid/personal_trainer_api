@@ -1,8 +1,6 @@
 from pydantic import BaseModel
 from datetime import date
 from typing import Optional
-from app.schemas.exercise import ExerciseOut
-from typing import List
 from app.schemas.user import UserOut
 
 
