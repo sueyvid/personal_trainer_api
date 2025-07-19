@@ -47,7 +47,6 @@ def get_my_workouts_as_student(
     return user.assigned_workouts  # <-- pega os treinos atribuídos ao aluno
 
 
-
 @router.put("/{workout_id}", response_model=WorkoutOut)
 def update_workout(
     workout_id: int,
@@ -93,6 +92,7 @@ def delete_workout(
     db.commit()
     return
 
+
 @router.patch("/{workout_id}/assign", response_model=WorkoutOut)
 def assign_students_to_workout(
     workout_id: int,
@@ -103,19 +103,22 @@ def assign_students_to_workout(
     workout = db.query(Workout).filter_by(id=workout_id).first()
 
     if not workout or workout.trainer_id != current_user["id"]:
-        raise HTTPException(status_code=404, detail="Treino não encontrado ou acesso negado")
+        raise HTTPException(
+            status_code=404, detail="Treino não encontrado ou acesso negado"
+        )
 
     students = db.query(User).filter(User.id.in_(data.student_ids)).all()
     if len(students) != len(data.student_ids):
         raise HTTPException(status_code=400, detail="Um ou mais alunos não existem")
-    
+
     for student in students:
         if student not in workout.students:
             workout.students.append(student)
-            
+
     db.commit()
     db.refresh(workout)
     return workout
+
 
 @router.delete("/{workout_id}/unassign/{student_id}", status_code=204)
 def unassign_student_from_workout(
@@ -127,7 +130,9 @@ def unassign_student_from_workout(
     workout = db.query(Workout).filter_by(id=workout_id).first()
 
     if not workout or workout.trainer_id != current_user["id"]:
-        raise HTTPException(status_code=404, detail="Treino não encontrado ou acesso negado")
+        raise HTTPException(
+            status_code=404, detail="Treino não encontrado ou acesso negado"
+        )
 
     student = db.query(User).filter_by(id=student_id).first()
     if not student:

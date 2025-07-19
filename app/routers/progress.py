@@ -11,6 +11,7 @@ from app.models.workout import Workout
 
 router = APIRouter(prefix="/progress", tags=["progress"])
 
+
 @router.post("/", response_model=ProgressOut)
 def mark_progress(
     data: ProgressCreate,
@@ -18,30 +19,38 @@ def mark_progress(
     current_user: dict = Depends(require_role("student")),
 ):
     # Verifica se o treino existe e pertence ao aluno
-    workout = db.query(Workout).filter(
-        Workout.id == data.workout_id,
-        Workout.student_id == current_user["id"]
-    ).first()
+    workout = (
+        db.query(Workout)
+        .filter(Workout.id == data.workout_id, Workout.student_id == current_user["id"])
+        .first()
+    )
 
     if not workout:
-        raise HTTPException(status_code=404, detail="Treino não encontrado ou não pertence a você.")
+        raise HTTPException(
+            status_code=404, detail="Treino não encontrado ou não pertence a você."
+        )
 
     # Impede duplicidade
-    existing = db.query(Progress).filter_by(
-        student_id=current_user["id"],
-        workout_id=data.workout_id,
-        date=data.date,
-    ).first()
+    existing = (
+        db.query(Progress)
+        .filter_by(
+            student_id=current_user["id"],
+            workout_id=data.workout_id,
+            date=data.date,
+        )
+        .first()
+    )
 
     if existing:
-        raise HTTPException(status_code=400, detail="Progresso já marcado para esse dia.")
+        raise HTTPException(
+            status_code=400, detail="Progresso já marcado para esse dia."
+        )
 
     progress = Progress(**data.dict(), student_id=current_user["id"])
     db.add(progress)
     db.commit()
     db.refresh(progress)
     return progress
-
 
 
 @router.get("/me", response_model=list[ProgressOut])

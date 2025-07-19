@@ -33,5 +33,6 @@ class WorkoutOut(BaseModel):
     students: list[UserOut] = []
     model_config = {"from_attributes": True}
 
+
 class WorkoutAssign(BaseModel):
     student_ids: list[int]

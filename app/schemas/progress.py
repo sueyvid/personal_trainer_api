@@ -3,12 +3,15 @@
 from pydantic import BaseModel
 from datetime import date
 
+
 class ProgressBase(BaseModel):
     workout_id: int
     date: date
 
+
 class ProgressCreate(ProgressBase):
     pass
+
 
 class ProgressOut(ProgressBase):
     id: int

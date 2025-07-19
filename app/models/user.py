@@ -27,4 +27,3 @@ class User(Base):
         secondary=workout_student,
         back_populates="students",
     )
-

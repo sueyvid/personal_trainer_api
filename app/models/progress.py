@@ -4,6 +4,7 @@ from sqlalchemy import Column, Integer, Date, ForeignKey, UniqueConstraint
 from sqlalchemy.orm import relationship
 from app.core.database import Base
 
+
 class Progress(Base):
     __tablename__ = "progress"
 
@@ -13,7 +14,9 @@ class Progress(Base):
     date = Column(Date, nullable=False)
 
     # Evita duplicação de marcações no mesmo dia
-    __table_args__ = (UniqueConstraint("student_id", "workout_id", "date", name="uq_progress_entry"),)
+    __table_args__ = (
+        UniqueConstraint("student_id", "workout_id", "date", name="uq_progress_entry"),
+    )
 
     student = relationship("User")
     workout = relationship("Workout")

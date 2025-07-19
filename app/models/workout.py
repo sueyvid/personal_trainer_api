@@ -29,5 +29,3 @@ class Workout(Base):
         secondary=workout_student,
         back_populates="assigned_workouts",
     )
-
-

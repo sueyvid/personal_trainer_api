@@ -18,13 +18,16 @@ def create_exercise(
     current_user: dict = Depends(require_role("trainer")),
 ):
     # Valida se o treino é do treinador
-    workout = db.query(Workout).filter(
-        Workout.id == data.workout_id,
-        Workout.trainer_id == current_user["id"]
-    ).first()
+    workout = (
+        db.query(Workout)
+        .filter(Workout.id == data.workout_id, Workout.trainer_id == current_user["id"])
+        .first()
+    )
 
     if not workout:
-        raise HTTPException(status_code=403, detail="Você não pode adicionar exercícios a esse treino.")
+        raise HTTPException(
+            status_code=403, detail="Você não pode adicionar exercícios a esse treino."
+        )
 
     exercise = Exercise(**data.dict())
     db.add(exercise)
