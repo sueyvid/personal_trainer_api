@@ -1,13 +1,15 @@
+# Dockerfile para frontend com Node.js + Vite
 FROM node:20
 
 WORKDIR /app
 
-COPY package*.json ./
-
+COPY package.json package-lock.json ./
 RUN npm install
+
+# Instalar Tailwind e dependências via npm
+RUN npx tailwindcss init -p
 
 COPY . .
 
-EXPOSE 5173
-
-CMD ["npm", "run", "dev", "--", "--host"]
+# Rodar dev server
+CMD ["npm", "run", "dev"]
