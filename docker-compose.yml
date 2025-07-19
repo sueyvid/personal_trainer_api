@@ -1,30 +1,43 @@
 # A linha 'version' não é mais necessária nas versões recentes do Docker Compose
 services:
-  api:
-    build: .
-    container_name: personal_trainer_api
+  db:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: appdb
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    networks:
+      - app-network
+
+  backend:
+    build: ./backend
     ports:
       - "8000:8000"
-    volumes:
-      - ./app:/app/app
     environment:
-      - DATABASE_URL=postgresql://postgres:postgres@postgres_db:5432/personal_trainer_db
-      - PGHOST=postgres_db
+      DATABASE_URL: postgresql://postgres:postgres@db:5432/appdb
     depends_on:
-      - postgres_db
-    command: uvicorn app.main:app --host 0.0.0.0 --port 8000
+      - db
+    networks:
+      - app-network
 
-  postgres_db:
-    image: postgres:15
-    container_name: postgres_db
-    environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
-      - POSTGRES_DB=personal_trainer_db
+  frontend:
+    build:
+      context: ./frontend
     ports:
-      - "5432:5432"
+      - "3000:5173"
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - ./frontend:/app
+    working_dir: /app
+    command: npm run dev -- --host
+    depends_on:
+      - backend
+    networks:
+      - app-network
 
 volumes:
-  postgres_data:
+  db_data:
+
+networks:
+  app-network:
