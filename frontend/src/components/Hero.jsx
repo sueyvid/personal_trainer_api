@@ -6,12 +6,22 @@ const Hero = () => {
       <p className="text-lg max-w-xl mx-auto mb-8 font-sans">
         Consultoria personalizada para transformar sua saúde e conquistar seus objetivos com flexibilidade e acompanhamento profissional.
       </p>
-      <a
-        href="#contact"
-        className="bg-yellow-400 text-white px-6 py-3 rounded-full font-semibold shadow-md hover:bg-yellow-300 transition"
-      >
-        Comece Agora
-      </a>
+
+      {/* Container com flex e gap */}
+      <div className="flex justify-center gap-4">
+        <a
+          href="login"
+          className="bg-blue-400 text-white px-6 py-3 rounded-full font-semibold shadow-md hover:bg-blue-300 transition"
+        >
+          Fazer Login
+        </a>
+        <a
+          href="register"
+          className="bg-yellow-400 text-white px-6 py-3 rounded-full font-semibold shadow-md hover:bg-yellow-300 transition"
+        >
+          Registrar-se
+        </a>
+      </div>
     </section>
   );
 };

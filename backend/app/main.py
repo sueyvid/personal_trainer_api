@@ -4,6 +4,7 @@ import asyncio
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware  # ← ADICIONADO AQUI
 from sqlalchemy import text
 from sqlalchemy.exc import OperationalError
 
@@ -14,9 +15,6 @@ from app.routers.exercises import router as exercises_router
 
 # Função para esperar o banco de dados
 async def wait_for_db(max_retries: int = 10, delay: float = 2.0):
-    """
-    Tenta se conectar ao banco de dados com múltiplas tentativas.
-    """
     for attempt in range(1, max_retries + 1):
         try:
             with engine.connect() as connection:
@@ -26,16 +24,11 @@ async def wait_for_db(max_retries: int = 10, delay: float = 2.0):
         except OperationalError as e:
             print(f"⏳ Tentativa {attempt} falhou: {e}")
             await asyncio.sleep(delay)
-    raise RuntimeError(
-        "❌ Não foi possível conectar ao banco de dados após várias tentativas."
-    )
+    raise RuntimeError("❌ Não foi possível conectar ao banco de dados após várias tentativas.")
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    """
-    Função que executa na inicialização e encerramento da API.
-    """
     print("🚀 Serviço iniciando... aguardando banco de dados.")
     await wait_for_db()
     init_db()
@@ -46,6 +39,16 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(title="API Personal Trainer", lifespan=lifespan)
 
+# ✅ CONFIGURAÇÃO DE CORS
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:3000"],  # ou ["*"] para desenvolvimento
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+# Rotas
 app.include_router(auth.router)
 app.include_router(users.router)
 app.include_router(workouts.router)
