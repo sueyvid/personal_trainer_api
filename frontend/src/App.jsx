@@ -1,16 +1,21 @@
 // src/App.jsx
-import Navbar from "./components/Navbar";
-import Hero from "./components/Hero";
-import './App.css'
+import { Routes, Route } from 'react-router-dom'
+import Navbar from './components/Navbar'
+import Home from './pages/Home'
+import Services from './pages/Services'
+import Contact from './pages/Contact'
 
-const App = () => {
+function App() {
   return (
-    <>
+    <div>
       <Navbar />
-      <Hero />
-    </>
-  );
-};
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/services" element={<Services />} />
+        <Route path="/contact" element={<Contact />} />
+      </Routes>
+    </div>
+  )
+}
 
-export default App;
-
+export default App

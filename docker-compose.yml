@@ -28,8 +28,8 @@ services:
     ports:
       - "3000:5173"
     volumes:
-      - ./frontend:/app
-      - /app/node_modules  # impede conflito de node_modules do host
+      - ./frontend/src:/app/src
+      - ./frontend/index.html:/app/index.html
     working_dir: /app
     command: npm run dev -- --host
     depends_on:
