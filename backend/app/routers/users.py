@@ -52,3 +52,8 @@ def delete_me(
     db.commit()
     # Um status 204 (No Content) não deve retornar um corpo de mensagem.
     return
+
+@router.get("/students", response_model=list[UserOut])
+def get_students(db: Session = Depends(get_db)):
+    students = db.query(User).filter(User.role == "student").all()
+    return students
